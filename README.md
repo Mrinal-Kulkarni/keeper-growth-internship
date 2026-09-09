@@ -36,6 +36,7 @@ Set `OPENAI_API_KEY` in `.env.local`, then open `http://localhost:3000`. `OPENAI
 
 ```bash
 npm run lint
+npm run test:unit
 npm run build
 npm run start
 ```
@@ -53,3 +54,9 @@ Unsupported and oversized files are skipped with an in-app notice. Before transm
 ## AI processing
 
 The server route uses the OpenAI Responses API with image inputs and a strict JSON schema. It returns only selected candidate indices, scores, and reasons; the application does not persist image data. See the [official OpenAI Responses API documentation](https://developers.openai.com/api/reference/typescript/resources/beta/subresources/responses/methods/create).
+
+## Failure handling
+
+Duplicate file selections, empty files, and unsupported formats are skipped with an explanation. Unreadable images are removed before submission, allowing the user to review the remaining set. Images are resized sequentially to reduce peak browser memory use. Analysis can be cancelled and has a timeout; invalid AI selections are rejected and valid selections are ordered by score.
+
+The server limits processed files to 6 MB each and the complete upload to 32 MB. The Open Keeper link opens Keeper; it does not transfer the selected photos.
